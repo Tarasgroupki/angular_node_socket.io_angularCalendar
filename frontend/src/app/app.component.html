@@ -1,0 +1,63 @@
+<div class="row text-center">
+<h1>Chat</h1>
+{{ count }}
+<div>
+  <div *ngFor="let message of messages">
+    {{ message }}
+  </div>
+</div>
+<div>
+  <input [(ngModel)]="label" type="text" />
+  <button (click)="createUser(label)"> Create </button>
+</div>
+
+<div *ngFor="let user of users">
+  <input [(ngModel)]="user.label" type="text" />
+  <button (click)="updateUser(user.label, user.id)"> Update </button>
+  <button (click)="deleteUser(user.id)"> Delete </button>
+</div>
+
+<ul *ngFor="let court of courts" class="full-calendar">
+<li>
+<div [ngSwitch]="view">
+<mwl-calendar-day-view
+  *ngSwitchCase="CalendarView.Day"
+  [viewDate]="viewDate"
+  id="{{ court?.id }}"
+  [events]="court?.events"
+  [refresh]="refresh"
+  (hourSegmentClicked)="handleEvent('Clicked', $event.date, court?._id)"
+  (eventClicked)="handleEvent('Clicked', $event.event, court?._id)"
+>
+</mwl-calendar-day-view>
+</div>
+</li>
+</ul>
+</div>
+
+<ng-template #modalContent let-close="close">
+  <div class="modal-header">
+    <h5 class="modal-title">Event action occurred</h5>
+    <button type="button" class="close" (click)="close()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div>Court Id: {{ modalData?.id }}</div>
+  <div class="modal-body">
+    <div>
+      Action:
+      <pre>{{ modalData?.action }}</pre>
+    </div>
+    <div>
+      Event:
+      <pre>{{ modalData?.event | json }}</pre>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="close()">
+      OK
+    </button>
+  </div>
+</ng-template>
+
+
